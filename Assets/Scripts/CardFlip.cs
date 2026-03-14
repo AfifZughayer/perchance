@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,5 +32,17 @@ public class CardFlip : MonoBehaviour
     public void FlipCard()
     {
         nextRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
+        CardComparator.Instance.CompareCard(this);
     }
+
+    public void ReturnFlip()
+    {
+        nextRotation = Quaternion.Euler(Vector3.zero);
+    }
+
+    public void RemoveCard()
+    {
+        Destroy(gameObject);
+    }
+
 }

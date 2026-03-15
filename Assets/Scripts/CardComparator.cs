@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardComparator : MonoBehaviour
 {
-    public static CardComparator Instance { get; private set; }
+    public static CardComparator Instance;
     public CardFlip card;
 
     private void Awake()
@@ -30,21 +30,20 @@ public class CardComparator : MonoBehaviour
             const int delay = 1;
             if (card.color == c.color)
             {
-                StartCoroutine(Delay(delay, card.RemoveCard));
-                StartCoroutine(Delay(delay, c.RemoveCard));
+                StartCoroutine(Delay(delay, card.RemoveCard, c.RemoveCard, ScoreSystem.Instance.AddScore));
             }
             else
             {
-                StartCoroutine(Delay(delay, card.ReturnFlip));
-                StartCoroutine(Delay(delay, c.ReturnFlip));
+                StartCoroutine(Delay(delay, card.ReturnFlip, c.ReturnFlip, ScoreSystem.Instance.ResetCombo));
             }
             card = null;
         }
     }
 
-    IEnumerator Delay(int time, Action func)
+    IEnumerator Delay(int time, params Action[] func)
     {
         yield return new WaitForSeconds(time);
-        func?.Invoke();
+        foreach (Action f in func)
+            f?.Invoke();
     }
 }

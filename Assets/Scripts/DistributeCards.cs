@@ -16,6 +16,7 @@ public class DistributeCards : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ScoreSystem.Instance.ResetScore();
         for (int i = 0; i < amount; i++)
         {
             GameObject o = Instantiate(card, transform);

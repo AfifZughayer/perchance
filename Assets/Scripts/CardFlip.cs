@@ -7,10 +7,13 @@ public class CardFlip : MonoBehaviour
 
     private RawImage img;
     public Color color = Color.red;
+    [SerializeField]
+    private AudioClip flipSound;
 
     [SerializeField]
     private float flipSpeed = 100;
     private Quaternion nextRotation;
+    bool isFlipped = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -30,13 +33,17 @@ public class CardFlip : MonoBehaviour
 
     public void FlipCard()
     {
-        nextRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
+        if (isFlipped) return;
+        nextRotation = Quaternion.Euler(0, 180, 0);
         CardComparator.Instance.CompareCard(this);
+        AudioManager.Instance.PlaySound(flipSound);
+        isFlipped = true;
     }
 
     public void ReturnFlip()
     {
         nextRotation = Quaternion.Euler(Vector3.zero);
+        isFlipped = false;
     }
 
     public void RemoveCard()

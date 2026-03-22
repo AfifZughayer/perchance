@@ -5,7 +5,13 @@ using UnityEngine;
 public class CardComparator : MonoBehaviour
 {
     public static CardComparator Instance;
+    [HideInInspector]
     public CardFlip card;
+
+    [SerializeField]
+    private AudioClip correct;
+    [SerializeField]
+    private AudioClip wrong;
 
     private void Awake()
     {
@@ -30,11 +36,27 @@ public class CardComparator : MonoBehaviour
             const int delay = 1;
             if (card.color == c.color)
             {
-                StartCoroutine(Delay(delay, card.RemoveCard, c.RemoveCard, ScoreSystem.Instance.AddScore));
+                StartCoroutine(Delay(delay, 
+                    card.RemoveCard, 
+                    c.RemoveCard, 
+                    ScoreSystem.Instance.AddScore,
+                    () =>
+                    {
+                        AudioManager.Instance.PlaySound(correct);
+                    }
+                    ));
             }
             else
             {
-                StartCoroutine(Delay(delay, card.ReturnFlip, c.ReturnFlip, ScoreSystem.Instance.ResetCombo));
+                StartCoroutine(Delay(delay,
+                    card.ReturnFlip,
+                    c.ReturnFlip,
+                    ScoreSystem.Instance.ResetCombo,
+                    () =>
+                    {
+                        AudioManager.Instance.PlaySound(wrong);
+                    }
+                    ));
             }
             card = null;
         }
@@ -46,4 +68,5 @@ public class CardComparator : MonoBehaviour
         foreach (Action f in func)
             f?.Invoke();
     }
+
 }

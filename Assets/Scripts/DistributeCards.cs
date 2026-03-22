@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class DistributeCards : MonoBehaviour
@@ -10,7 +11,6 @@ public class DistributeCards : MonoBehaviour
     [SerializeField]
     private int amount = 16;
 
-    List<CardFlip> cards = new List<CardFlip>();
     List<Color> colors = new List<Color>() { Color.red, Color.blue, Color.green, Color.gray, Color.black, Color.yellow, Color.magenta, Color.cyan};
 
     // Start is called before the first frame update
@@ -22,17 +22,22 @@ public class DistributeCards : MonoBehaviour
             GameObject o = Instantiate(card, transform);
             CardFlip c = o.GetComponent<CardFlip>();
             c.color = colors[i/2];
-            cards.Add(c);
         }
-        ShuffleCards(cards);
+        ShuffleCards(transform.GetComponentsInChildren<CardFlip>());
         Invoke("RemoveLayoutGroup", 0.5f);
     }
 
-    void ShuffleCards(List<CardFlip> list)
+    private void Update()
+    {
+        if (transform.childCount > 0) return;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void ShuffleCards(CardFlip[] list)
     {
         foreach (CardFlip c in list)
         {
-            c.transform.SetSiblingIndex(Random.Range(0, list.Count));
+            c.transform.SetSiblingIndex(Random.Range(0, list.Length));
         }
     }
 

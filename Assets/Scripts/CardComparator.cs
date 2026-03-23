@@ -34,6 +34,7 @@ public class CardComparator : MonoBehaviour
         else
         {
             const int delay = 1;
+            ScoreSystem.Instance.IncreaseTurns();
             if (card.color == c.color)
             {
                 StartCoroutine(Delay(delay, 

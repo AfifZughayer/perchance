@@ -13,13 +13,20 @@ public class CardFlip : MonoBehaviour
     [SerializeField]
     private float flipSpeed = 100;
     private Quaternion nextRotation;
-    bool isFlipped = false;
+    bool isFlipped = true;
 
     // Start is called before the first frame update
     void Awake()
     {
         img = GetComponent<RawImage>();
         nextRotation = transform.rotation;
+    }
+
+    private void Start()
+    {
+        transform.rotation = Quaternion.Euler(0, 180, 0);
+        nextRotation = Quaternion.Euler(0, 180, 0);
+        Invoke("ReturnFlip", 3);
     }
 
     private void Update()

@@ -8,7 +8,10 @@ public class ScoreSystem : MonoBehaviour
 
 
     [SerializeField]
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI scoreText;
+    [SerializeField]
+    private TextMeshProUGUI turnText;
+    private int turns = 0;
     private int score = 0;
     private int combo = 0;
 
@@ -22,11 +25,6 @@ public class ScoreSystem : MonoBehaviour
         {
             Instance = this;
         }
-    }
-
-    private void UpdateText()
-    {
-        text.text = "Score:\n" + score;
     }
 
     public int GetScore()
@@ -48,6 +46,12 @@ public class ScoreSystem : MonoBehaviour
     {
         score += 10*combo + 10;
         combo++;
-        UpdateText();
+        scoreText.text = "Score:\n" + score;
+    }
+
+    public void IncreaseTurns()
+    {
+        turns++;
+        turnText.text = "Turns:\n" + turns;
     }
 }

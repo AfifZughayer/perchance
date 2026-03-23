@@ -32,14 +32,26 @@ public class ScoreSystem : MonoBehaviour
         return score;
     }
 
-    public void ResetScore()
+    public int GetTurns()
     {
-        score = 0;
+        return turns;
     }
 
     public void ResetCombo()
     {
         combo = 0;
+    }
+
+    public void SetScore(int s)
+    {
+        score = s;
+        scoreText.text = "Score:\n" + score;
+    }
+
+    public void SetTurns(int t)
+    {
+        turns = t;
+        turnText.text = "Turns:\n" + turns;
     }
 
     public void AddScore()
@@ -49,7 +61,7 @@ public class ScoreSystem : MonoBehaviour
         scoreText.text = "Score:\n" + score;
     }
 
-    public void IncreaseTurns()
+    public void AddTurns()
     {
         turns++;
         turnText.text = "Turns:\n" + turns;

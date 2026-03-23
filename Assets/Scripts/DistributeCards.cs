@@ -16,15 +16,10 @@ public class DistributeCards : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ScoreSystem.Instance.ResetScore();
-        for (int i = 0; i < amount; i++)
-        {
-            GameObject o = Instantiate(card, transform);
-            CardFlip c = o.GetComponent<CardFlip>();
-            c.color = colors[i/2];
-        }
-        ShuffleCards(transform.GetComponentsInChildren<CardFlip>());
-        Invoke("RemoveLayoutGroup", 0.5f);
+        if (SaveSystem.Instance.loading == false)
+            FreshShuffle();
+        else
+            LoadShuffle();
     }
 
     private void Update()
@@ -33,6 +28,34 @@ public class DistributeCards : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    void FreshShuffle()
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject o = Instantiate(card, transform);
+            CardFlip c = o.GetComponent<CardFlip>();
+            c.color = colors[i / 2];
+        }
+        ShuffleCards(transform.GetComponentsInChildren<CardFlip>());
+        Invoke("RemoveLayoutGroup", 0.5f);
+    }
+
+    void LoadShuffle()
+    {
+        RemoveLayoutGroup();
+        CardWrapper wrapper = SaveSystem.Instance.Load();
+        CardObject[] savedCards = wrapper.GetCards();
+        foreach (CardObject savedCard in savedCards)
+        {
+            GameObject o = Instantiate(card, transform);
+            CardFlip c = o.GetComponent<CardFlip>();
+            c.transform.position = savedCard.GetPos();
+            c.color = savedCard.GetColor();
+        }
+        ScoreSystem.Instance.SetScore(wrapper.GetScore());
+        ScoreSystem.Instance.SetTurns(wrapper.GetTurns());
+        SaveSystem.Instance.loading = false;
+    }
     void ShuffleCards(CardFlip[] list)
     {
         foreach (CardFlip c in list)

@@ -10,6 +10,10 @@ public class DistributeCards : MonoBehaviour
     private GameObject card;
     [SerializeField]
     private int amount = 16;
+    [SerializeField]
+    private GameObject panel;
+    [SerializeField]
+    private AudioClip gameOver;
 
     List<Color> colors = new List<Color>() { Color.red, Color.blue, Color.green, Color.gray, Color.black, Color.yellow, Color.magenta, Color.cyan};
 
@@ -24,8 +28,9 @@ public class DistributeCards : MonoBehaviour
 
     private void Update()
     {
-        if (transform.childCount > 0) return;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (transform.childCount > 0 || panel.activeInHierarchy == true) return;
+        AudioManager.Instance.PlaySound(gameOver);
+        panel.SetActive(true);
     }
 
     void FreshShuffle()
@@ -67,5 +72,15 @@ public class DistributeCards : MonoBehaviour
     void RemoveLayoutGroup()
     {
         Destroy(GetComponent<GridLayoutGroup>());
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
